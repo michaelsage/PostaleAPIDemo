@@ -15,3 +15,4 @@ email_logs.htm / get_email_logs.php - Returns the email logs for a chosen date
 index.html - An HTML page with a link to all the tools
 list_domains.htm / get_domains.php - Lists all the domains in the account
 password_reset.php - Allow users to reset their password, this is very, very, very easy to abuse, it doesn't allow password changes for domain or global admin accounts
+![Screenshot 2025-07-07 103814](https://github.com/user-attachments/assets/bd83f03f-748f-4182-b2bb-89a8b4432a4a)
