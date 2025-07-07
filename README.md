@@ -16,4 +16,6 @@ The pages are:<br>
 <li>list_domains.htm / get_domains.php - Lists all the domains in the account</li>
 <li>password_reset.php - Allow users to reset their password, this is very, very, very easy to abuse, it doesn't allow password changes for domain or global admin accounts</li>
 </ul>
-![Screenshot 2025-07-07 124844](https://github.com/user-attachments/assets/8551e386-77da-4b35-8d8e-c7f221c3014b)
+
+![Index Page](https://github.com/user-attachments/assets/0046e99d-8093-4b65-be3a-2d1e6e9fd548)
+
