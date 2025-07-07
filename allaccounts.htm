@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mailbox List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            margin-top: 10px;
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mailbox List</h1>
+        <div class="button-container">
+            <button id="fetchMailboxes">Fetch Mailboxes</button>
+            <button id="exportCsv">Export to CSV</button>
+        </div>
+        <p id="message"></p>
+        <div id="mailboxTableContainer">
+            <table id="mailboxTable">
+                <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th>Name</th>
+                        <th>Disabled</th>
+                        <th>Full Admin</th>
+                        <th>Domain Admin</th>
+                        <th>Password Strength</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Your JavaScript will now call your PHP script
+        // The PHP script handles the secure API call and CORS
+        const phpApiUrl = 'get_mailboxes.php'; // Path to your PHP script
+
+        const mailboxTableBody = document.querySelector('#mailboxTable tbody');
+        const messageElement = document.getElementById('message');
+        let mailboxesData = []; // To store the fetched data
+
+        async function fetchMailboxes() {
+            messageElement.textContent = 'Fetching mailboxes...';
+            try {
+                // No need for Authorization header here, PHP handles it
+                const response = await fetch(phpApiUrl, {
+                    method: 'GET'
+                });
+
+                if (!response.ok) {
+                    const errorDetails = await response.json(); // PHP returns JSON errors
+                    throw new Error(`Server error: ${errorDetails.error || 'Unknown error'}. Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Check if the API response itself indicates an error (e.g., from PHP error handling)
+                if (data.error) {
+                    throw new Error(`API error: ${data.error}. Details: ${data.details || 'No details.'}`);
+                }
+
+                mailboxesData = data.results || []; // Assuming 'results' is the array of mailboxes
+                displayMailboxes(mailboxesData);
+                messageElement.textContent = 'Mailboxes loaded successfully.';
+            } catch (error) {
+                console.error('Error fetching mailboxes:', error);
+                messageElement.textContent = `Error: ${error.message}`;
+                mailboxTableBody.innerHTML = ''; // Clear table on error
+            }
+        }
+
+        function displayMailboxes(mailboxes) {
+            mailboxTableBody.innerHTML = ''; // Clear existing rows
+            if (mailboxes.length === 0) {
+                mailboxTableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No mailboxes found.</td></tr>';
+                return;
+            }
+
+            mailboxes.forEach(mailbox => {
+                const row = mailboxTableBody.insertRow();
+                row.insertCell().textContent = mailbox.address;
+                row.insertCell().textContent = mailbox.name;
+                row.insertCell().textContent = mailbox.disabled ? 'Yes' : 'No';
+                row.insertCell().textContent = mailbox.fullAdmin ? 'Yes' : 'No';
+                row.insertCell().textContent = mailbox.domainAdmin ? 'Yes' : 'No';
+                row.insertCell().textContent = mailbox.passwordStrength;
+                row.insertCell().textContent = new Date(mailbox.created).toLocaleString();
+                row.insertCell().textContent = new Date(mailbox.updated).toLocaleString();
+            });
+        }
+
+        function exportToCsv() {
+            if (mailboxesData.length === 0) {
+                messageElement.textContent = 'No data to export. Please fetch mailboxes first.';
+                return;
+            }
+
+            const headers = Object.keys(mailboxesData[0]).join(',');
+            const rows = mailboxesData.map(row =>
+                Object.values(row).map(value => {
+                    let stringValue = String(value);
+                    if (stringValue.includes(',') || stringValue.includes('"')) {
+                        stringValue = `"${stringValue.replace(/"/g, '""')}"`;
+                    }
+                    return stringValue;
+                }).join(',')
+            );
+
+            const csvContent = [headers, ...rows].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mailboxes.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            messageElement.textContent = 'Data exported to mailboxes.csv';
+        }
+
+        // Event Listeners
+        document.getElementById('fetchMailboxes').addEventListener('click', fetchMailboxes);
+        document.getElementById('exportCsv').addEventListener('click', exportToCsv);
+
+        // Initial fetch when the page loads
+        document.addEventListener('DOMContentLoaded', fetchMailboxes);
+    </script>
+</body>
+</html>

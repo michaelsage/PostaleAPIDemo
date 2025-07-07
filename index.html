@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md mx-4">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Email Tools</h1>
+
+        <nav class="space-y-4">
+            <a href="https://postale.io/webmail/" class="flex items-center justify-center p-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+                <span class="text-lg font-medium">Webmail</span>
+            </a>
+
+            <a href="https://hs1.bz/roundcube" class="flex items-center justify-center p-4 bg-pink-500 text-white rounded-lg shadow-md hover:bg-pink-600 transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+                <span class="text-lg font-medium">Alias Webmail</span>
+            </a>
+
+            <a href="allaccounts.htm" class="flex items-center justify-center p-4 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h10"></path>
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+                <span class="text-lg font-medium">All Mailboxes</span>
+            </a>
+
+            <a href="allaliases.htm" class="flex items-center justify-center p-4 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <line x1="8" x2="21" y1="6" y2="6"></line>
+                    <line x1="8" x2="21" y1="12" y2="12"></line>
+                    <line x1="8" x2="21" y1="18" y2="18"></line>
+                    <line x1="3" x2="3.01" y1="6" y2="6"></line>
+                    <line x1="3" x2="3.01" y1="12" y2="12"></line>
+                    <line x1="3" x2="3.01" y1="18" y2="18"></line>
+                </svg>
+                <span class="text-lg font-medium">All Aliases</span>
+            </a>
+<a href="list_domains.htm" class="flex items-center justify-center p-4 bg-teal-500 text-white rounded-lg shadow-md hover:bg-teal-600 transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                    <path d="M2 12h20"></path>
+                </svg>
+                <span class="text-lg font-medium">List Domains</span>
+            </a>
+            <a href="aliases.php" class="flex items-center justify-center p-4 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <line x1="8" x2="21" y1="6" y2="6"></line>
+                    <line x1="8" x2="21" y1="12" y2="12"></line>
+                    <line x1="8" x2="21" y1="18" y2="18"></line>
+                    <line x1="3" x2="3.01" y1="6" y2="6"></line>
+                    <line x1="3" x2="3.01" y1="12" y2="12"></line>
+                    <line x1="3" x2="3.01" y1="18" y2="18"></line>
+                </svg>
+                <span class="text-lg font-medium">View Aliases</span>
+            </a>
+
+            <a href="alias.html" class="flex items-center justify-center p-4 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-600 transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <path d="M12 5v14"></path>
+                    <path d="M5 12h14"></path>
+                </svg>
+                <span class="text-lg font-medium">Create Alias</span>
+            </a>
+
+ <a href="email_logs.htm" class="flex items-center justify-center p-4 bg-orange-500 text-white rounded-lg shadow-md hover:bg-orange-600 transition duration-300 ease-in-out transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 mr-3">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                </svg>
+                <span class="text-lg font-medium">Email Logs</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

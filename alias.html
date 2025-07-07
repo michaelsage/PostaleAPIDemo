@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Postale.io Alias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #6366f1; /* Indigo-500 */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #6366f1; /* Indigo-500 */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        button:hover {
+            background-color: #4f46e5; /* Indigo-600 */
+            transform: translateY(-1px);
+        }
+        button:active {
+            background-color: #4338ca; /* Indigo-700 */
+            transform: translateY(0);
+        }
+        h2 {
+            text-align: center;
+            color: #1a202c;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Postale.io Alias</h2>
+        <!-- The form will submit to a PHP script named 'process_alias.php' -->
+        <form action="process_alias.php" method="POST">
+            <div class="form-group">
+                <label for="alias">Alias:</label>
+                <input type="text" id="alias" name="alias" placeholder="e.g., my-alias" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="e.g., My Project Alias" required>
+            </div>
+            <div class="form-group">
+                <label for="redirectTo">Redirect To:</label>
+                <input type="text" id="redirectTo" name="redirectTo" placeholder="e.g., user@example.com" required>
+            </div>
+            <button type="submit">Create Alias</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Logs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .input-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-container label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .input-container input[type="date"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top; /* Align content to top for multi-line cells */
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            margin-top: 10px;
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Email Logs</h1>
+        <div class="input-container">
+            <label for="logDate">Select Date:</label>
+            <input type="date" id="logDate">
+        </div>
+        <div class="button-container">
+            <button id="fetchLogs">Fetch Logs</button>
+            <button id="exportCsv">Export to CSV</button>
+        </div>
+        <p id="message"></p>
+        <div id="logsTableContainer">
+            <table id="emailLogsTable">
+                <thead>
+                    <tr>
+                        <th>Datetime</th>
+                        <th>ID</th>
+                        <th>IP</th>
+                        <th>Reverse</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Redirected From</th>
+                        <th>Subject</th>
+                        <th>Message ID</th>
+                        <th>Result</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Email log data will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const phpApiUrl = 'get_email_logs.php'; // Path to your PHP script
+
+        const emailLogsTableBody = document.querySelector('#emailLogsTable tbody');
+        const messageElement = document.getElementById('message');
+        const logDateInput = document.getElementById('logDate');
+        let emailLogsData = []; // To store the fetched data
+
+        // Set today's date as default
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const day = String(today.getDate()).padStart(2, '0');
+        logDateInput.value = `${year}-${month}-${day}`;
+
+        async function fetchEmailLogs() {
+            const selectedDate = logDateInput.value;
+            if (!selectedDate) {
+                messageElement.textContent = 'Please select a date.';
+                return;
+            }
+
+            messageElement.textContent = 'Fetching email logs...';
+            emailLogsData = []; // Clear previous data
+            emailLogsTableBody.innerHTML = ''; // Clear table immediately
+
+            try {
+                // Pass the selected date as a query parameter to the PHP script
+                const response = await fetch(`${phpApiUrl}?date=${selectedDate}`, {
+                    method: 'GET'
+                });
+
+                if (!response.ok) {
+                    const errorDetails = await response.json();
+                    throw new Error(`Server error: ${errorDetails.error || 'Unknown error'}. Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(`API error: ${data.error}. Details: ${data.details || 'No details.'}`);
+                }
+
+                emailLogsData = data.results || [];
+                displayEmailLogs(emailLogsData);
+                messageElement.textContent = `Email logs loaded successfully. Total: ${emailLogsData.length}`;
+            } catch (error) {
+                console.error('Error fetching email logs:', error);
+                messageElement.textContent = `Error: ${error.message}`;
+                emailLogsTableBody.innerHTML = ''; // Clear table on error
+            }
+        }
+
+        function displayEmailLogs(logs) {
+            emailLogsTableBody.innerHTML = ''; // Clear existing rows
+            if (logs.length === 0) {
+                emailLogsTableBody.innerHTML = '<tr><td colspan="11" style="text-align: center;">No email logs found for this date.</td></tr>';
+                return;
+            }
+
+            logs.forEach(log => {
+                const row = emailLogsTableBody.insertRow();
+                row.insertCell().textContent = log.datetime ? new Date(log.datetime).toLocaleString() : '';
+                row.insertCell().textContent = log.id || '';
+                row.insertCell().textContent = log.ip || '';
+                row.insertCell().textContent = log.reverse || '';
+                row.insertCell().textContent = log.from || '';
+                
+                // Handle 'to' array
+                const toText = Array.isArray(log.to) ? log.to.join(', ') : '';
+                row.insertCell().textContent = toText;
+
+                // Handle 'redirectedFrom' array
+                const redirectedFromText = Array.isArray(log.redirectedFrom) ? log.redirectedFrom.join(', ') : '';
+                row.insertCell().textContent = redirectedFromText;
+
+                row.insertCell().textContent = log.subject || '';
+                row.insertCell().textContent = log.messageId || '';
+                row.insertCell().textContent = log.result || '';
+                row.insertCell().textContent = log.status || '';
+            });
+        }
+
+        function exportEmailLogsToCsv() {
+            if (emailLogsData.length === 0) {
+                messageElement.textContent = 'No data to export. Please fetch logs first.';
+                return;
+            }
+
+            // Explicitly define headers to match the JSON structure
+            const headers = [
+                "datetime", "id", "ip", "reverse", "from", "to", 
+                "redirectedFrom", "subject", "messageId", "result", "status"
+            ].join(',');
+
+            const rows = emailLogsData.map(row => {
+                const values = [];
+                values.push(row.datetime ? new Date(row.datetime).toLocaleString() : '');
+                values.push(row.id || '');
+                values.push(row.ip || '');
+                values.push(row.reverse || '');
+                values.push(row.from || '');
+                
+                // Handle 'to' array for CSV: join elements and properly quote
+                const toCsv = Array.isArray(row.to) 
+                              ? row.to.map(item => String(item).replace(/"/g, '""')).join('; ') 
+                              : '';
+                values.push(toCsv);
+
+                // Handle 'redirectedFrom' array for CSV: join elements and properly quote
+                const redirectedFromCsv = Array.isArray(row.redirectedFrom) 
+                                          ? row.redirectedFrom.map(item => String(item).replace(/"/g, '""')).join('; ') 
+                                          : '';
+                values.push(redirectedFromCsv);
+
+                values.push(row.subject || '');
+                values.push(row.messageId || '');
+                values.push(row.result || '');
+                values.push(row.status || '');
+                
+                return values.map(value => {
+                    let stringValue = String(value);
+                    if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+                        stringValue = `"${stringValue.replace(/"/g, '""')}"`;
+                    }
+                    return stringValue;
+                }).join(',');
+            });
+
+            const csvContent = [headers, ...rows].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'email_logs.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            messageElement.textContent = 'Data exported to email_logs.csv';
+        }
+
+        // Event Listeners
+        document.getElementById('fetchLogs').addEventListener('click', fetchEmailLogs);
+        document.getElementById('exportCsv').addEventListener('click', exportEmailLogsToCsv);
+
+        // Set default date and clear message on initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            // No initial fetch, user clicks button after selecting date
+            messageElement.textContent = ''; 
+        });
+    </script>
+</body>
+</html>
